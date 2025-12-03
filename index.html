@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络安全教程中心 | SecDev博客</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --cyber-color: #0abf53;
+            --dark-color: #1a2530;
+            --darker-color: #0f1721;
+            --light-color: #ecf0f1;
+            --gray-color: #95a5a6;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--darker-color);
+            color: #e0e0e0;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(41, 128, 185, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(10, 191, 83, 0.1) 0%, transparent 20%);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--cyber-color);
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: #07d159;
+            text-shadow: 0 0 8px rgba(10, 191, 83, 0.6);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--cyber-color), #089e45);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(10, 191, 83, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #07d159, #0abf53);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(10, 191, 83, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--cyber-color);
+            color: var(--cyber-color);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(10, 191, 83, 0.15);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(26, 37, 48, 0.95);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--light-color);
+        }
+
+        .logo span {
+            color: var(--cyber-color);
+            margin-left: 5px;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--cyber-color);
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--cyber-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--cyber-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--light-color);
+        }
+
+        /* Hero Section */
+        .tutorial-hero {
+            background: linear-gradient(135deg, rgba(26, 37, 48, 0.9), rgba(15, 23, 33, 0.95));
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--cyber-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tutorial-hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(10, 191, 83, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(52, 152, 219, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .tutorial-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tutorial-hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            animation: fadeInUp 1s ease;
+            color: #b0b0b0;
+        }
+
+        /* Category Navigation */
+        .category-nav {
+            background: rgba(26, 37, 48, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 40px auto;
+            max-width: 1000px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(52, 152, 219, 0.1);
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .category-btn {
+            background: rgba(10, 191, 83, 0.1);
+            color: var(--cyber-color);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .category-btn i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: var(--cyber-color);
+            color: white;
+        }
+
+        /* Tutorial Grid */
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .tutorial-card {
+            background: rgba(26, 37, 48, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(52, 152, 219, 0.1);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+
+        .tutorial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(10, 191, 83, 0.3);
+        }
+
+        .tutorial-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .tutorial-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .tutorial-card:hover .tutorial-header img {
+            transform: scale(1.05);
+        }
+
+        .tutorial-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--cyber-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tutorial-content {
+            padding: 25px;
+        }
+
+        .tutorial-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--light-color);
+        }
+
+        .tutorial-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+
+        .tutorial-meta span {
+            display: flex;
+            align-items: center;
+        }
+
+        .tutorial-meta i {
+            margin-right: 5px;
+            color: var(--cyber-color);
+        }
+
+        .tutorial-desc {
+            color: #b0b0b0;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .tutorial-modules {
+            background: rgba(15, 23, 33, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tutorial-modules h4 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--cyber-color);
+        }
+
+        .tutorial-modules ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .tutorial-modules li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .tutorial-modules li:before {
+            content: '•';
+            color: var(--cyber-color);
+            position: absolute;
+            left: -15px;
+        }
+
+        .tutorial-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .tutorial-rating {
+            color: var(--warning-color);
+        }
+
+        /* B站视频嵌入样式 */
+        .bilibili-embed {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .bilibili-embed iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 23, 33, 0.95);
+            color: white;
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(10, 191, 83, 0.2);
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            color: var(--light-color);
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--cyber-color);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyber-color);
+            padding-left: 5px;
+        }
+
+        .contact-info li {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .contact-info i {
+            margin-right: 10px;
+            color: var(--cyber-color);
+            width: 20px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .tutorial-hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .tutorial-hero p {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(26, 37, 48, 0.95);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+                transform: translateY(-150%);
+                transition: var(--transition);
+                backdrop-filter: blur(10px);
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+            }
+            
+            .nav-links li {
+                margin: 15px 0;
+            }
+
+            .tutorial-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-tabs {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .tutorial-hero {
+                padding: 100px 0 60px;
+            }
+            
+            .tutorial-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tutorial-hero p {
+                font-size: 1rem;
+            }
+            
+            .footer-column {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-terminal"></i>
+                    Sec<span>Dev</span>教程中心
+                </a>
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="#" class="active">教程中心</a></li>
+                    <li><a href="learning-center.html">学习路径</a></li>
+                    <li><a href="resources.html">资源下载</a></li>
+                    <li><a href="#">社区交流</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="tutorial-hero">
+        <div class="container">
+            <h1>B站优质网络安全教程</h1>
+            <p>精选B站最受欢迎的网络安全、渗透测试和技术开发视频教程</p>
+        </div>
+    </section>
+
+    <!-- Category Navigation -->
+    <div class="container">
+        <div class="category-nav">
+            <div class="category-tabs">
+                <button class="category-btn active">
+                    <i class="fas fa-shield-alt"></i> 网络安全
+                </button>
+                <button class="category-btn">
+                    <i class="fab fa-linux"></i> Linux系统
+                </button>
+                <button class="category-btn">
+                    <i class="fas fa-tools"></i> 渗透测试
+                </button>
+                <button class="category-btn">
+                    <i class="fas fa-network-wired"></i> 远程技术
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Grid -->
+    <div class="container">
+        <div class="tutorial-grid">
+            <!-- Kali 教程 -->
+            <div class="tutorial-card">
+                <div class="tutorial-header">
+                    <img src="https://i0.hdslb.com/bfs/archive/3a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0.jpg" alt="Kali渗透测试">
+                    <div class="tutorial-tag">热门</div>
+                </div>
+                <div class="tutorial-content">
+                    <h3 class="tutorial-title">Kali Linux渗透测试实战</h3>
+                    <div class="tutorial-meta">
+                        <span><i class="far fa-clock"></i> 12小时</span>
+                        <span><i class="fas fa-signal"></i> 中级</span>
+                        <span><i class="far fa-eye"></i> 50万+观看</span>
+                    </div>
+                    <p class="tutorial-desc">全面讲解Kali Linux渗透测试工具使用，涵盖信息收集、漏洞扫描、渗透攻击和后渗透阶段。</p>
+                    
+                    <div class="bilibili-embed">
+                        <iframe src="//player.bilibili.com/player.html?aid=456789012&bvid=BV1pLK3zeEK9&cid=123456789&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <a href="https://www.bilibili.com/video/BV1pLK3zeEK9/?vd_source=a94915ba8dca0a7a592f61258d7e7e21" target="_blank" class="btn">前往B站观看</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Linux 教程 -->
+            <div class="tutorial-card">
+                <div class="tutorial-header">
+                    <img src="https://i0.hdslb.com/bfs/archive/4b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0.jpg" alt="Linux系统">
+                    <div class="tutorial-tag">零基础</div>
+                </div>
+                <div class="tutorial-content">
+                    <h3 class="tutorial-title">Linux零基础快速入门到精通</h3>
+                    <div class="tutorial-meta">
+                        <span><i class="far fa-clock"></i> 15小时</span>
+                        <span><i class="fas fa-signal"></i> 初级</span>
+                        <span><i class="far fa-eye"></i> 80万+观看</span>
+                    </div>
+                    <p class="tutorial-desc">从零开始学习Linux系统管理，掌握常用命令、Shell脚本编程和服务器部署。</p>
+                    
+                    <div class="bilibili-embed">
+                        <iframe src="//player.bilibili.com/player.html?aid=456789013&bvid=BV1n84y1i7td&cid=123456790&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <a href="https://www.bilibili.com/video/BV1n84y1i7td/?vd_source=a94915ba8dca0a7a592f61258d7e7e21" target="_blank" class="btn">前往B站观看</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Web安全教程 -->
+            <div class="tutorial-card">
+                <div class="tutorial-header">
+                    <img src="https://i0.hdslb.com/bfs/archive/5c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0.jpg" alt="Web安全">
+                    <div class="tutorial-tag">实战</div>
+                </div>
+                <div class="tutorial-content">
+                    <h3 class="tutorial-title">Web安全渗透测试实战</h3>
+                    <div class="tutorial-meta">
+                        <span><i class="far fa-clock"></i> 10小时</span>
+                        <span><i class="fas fa-signal"></i> 高级</span>
+                        <span><i class="far fa-eye"></i> 35万+观看</span>
+                    </div>
+                    <p class="tutorial-desc">深入讲解Web应用安全漏洞原理，包括SQL注入、XSS、CSRF等漏洞的挖掘与防御。</p>
+                    
+                    <div class="bilibili-embed">
+                        <iframe src="//player.bilibili.com/player.html?aid=456789014&bvid=BV1dxrvYTE48&cid=123456791&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <a href="https://www.bilibili.com/video/BV1dxrvYTE48/?vd_source=a94915ba8dca0a7a592f61258d7e7e21" target="_blank" class="btn">前往B站观看</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内网渗透教程 -->
+            <div class="tutorial-card">
+                <div class="tutorial-header">
+                    <img src="https://i0.hdslb.com/bfs/archive/6d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0.jpg" alt="内网渗透">
+                    <div class="tutorial-tag">进阶</div>
+                </div>
+                <div class="tutorial-content">
+                    <h3 class="tutorial-title">内网渗透与横向移动技术</h3>
+                    <div class="tutorial-meta">
+                        <span><i class="far fa-clock"></i> 8小时</span>
+                        <span><i class="fas fa-signal"></i> 高级</span>
+                        <span><i class="far fa-eye"></i> 25万+观看</span>
+                    </div>
+                    <p class="tutorial-desc">学习内网渗透的核心技术，包括权限提升、横向移动、持久化控制以及域环境渗透。</p>
+                    
+                    <div class="bilibili-embed">
+                        <iframe src="//player.bilibili.com/player.html?aid=456789015&bvid=BV1a2XoYpErM&cid=123456792&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <a href="https://www.bilibili.com/video/BV1a2XoYpErM/?vd_source=a94915ba8dca0a7a592f61258d7e7e21" target="_blank" class="btn">前往B站观看</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 远程桌面教程 -->
+            <div class="tutorial-card">
+                <div class="tutorial-header">
+                    <img src="https://i0.hdslb.com/bfs/archive/7e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0.jpg" alt="远程桌面">
+                    <div class="tutorial-tag">实用</div>
+                </div>
+                <div class="tutorial-content">
+                    <h3 class="tutorial-title">Mac远程控制Windows电脑</h3>
+                    <div class="tutorial-meta">
+                        <span><i class="far fa-clock"></i> 3小时</span>
+                        <span><i class="fas fa-signal"></i> 初级</span>
+                        <span><i class="far fa-eye"></i> 15万+观看</span>
+                    </div>
+                    <p class="tutorial-desc">使用cpolar实现内网穿透，Mac远程控制Windows电脑的完整解决方案。</p>
+                    
+                    <div class="bilibili-embed">
+                        <iframe src="//player.bilibili.com/player.html?aid=456789016&bvid=BV1fcdSYDEoa&cid=123456793&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <a href="https://www.bilibili.com/video/BV1fcdSYDEoa/?vd_source=a94915ba8dca0a7a592f61258d7e7e21" target="_blank" class="btn">前往B站观看</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 串流技术教程 -->
+            <div class="tutorial-card">
+                <div class="tutorial-header">
+                    <img src="https://i0.hdslb.com/bfs/archive/8f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0.jpg" alt="串流技术">
+                    <div class="tutorial-tag">高性能</div>
+                </div>
+                <div class="tutorial-content">
+                    <h3 class="tutorial-title">Moonlight+Sunshine串流技术</h3>
+                    <div class="tutorial-meta">
+                        <span><i class="far fa-clock"></i> 5小时</span>
+                        <span><i class="fas fa-signal"></i> 中级</span>
+                        <span><i class="far fa-eye"></i> 20万+观看</span>
+                    </div>
+                    <p class="tutorial-desc">构建低延迟的游戏串流和工作站远程访问方案，支持内网穿透实现外网访问。</p>
+                    
+                    <div class="bilibili-embed">
+                        <iframe src="//player.bilibili.com/player.html?aid=456789017&bvid=BV1oQ4y1m7Ps&cid=123456794&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <a href="https://www.bilibili.com/video/BV1oQ4y1m7Ps/?spm_id_from=333.1387.favlist.content.click&vd_source=a94915ba8dca0a7a592f61258d7e7e21" target="_blank" class="btn">前往B站观看</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>关于教程中心</h3>
+                    <p style="color: #b0b0b0; margin-bottom: 20px;">SecDev教程中心精选B站优质网络安全和技术开发视频教程，助力技术人员技能提升。</p>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" style="color: #b0b0b0; font-size: 20px;"><i class="fab fa-github"></i></a>
+                        <a href="#" style="color: #b0b0b0; font-size: 20px;"><i class="fab fa-weibo"></i></a>
+                        <a href="#" style="color: #b0b0b0; font-size: 20px;"><i class="fab fa-zhihu"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>教程分类</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> 网络安全</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Linux系统</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> 渗透测试</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> 远程技术</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> 开发工具</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>学习资源</h3>
+                    <ul class="footer-links">
+                        <li><a href="learning-center.html"><i class="fas fa-book"></i> 学习中心</a></li>
+                        <li><a href="resources.html"><i class="fas fa-download"></i> 资源下载</a></li>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> 技术文档</a></li>
+                        <li><a href="#"><i class="fas fa-laptop-code"></i> 实验环境</a></li>
+                        <li><a href="#"><i class="fas fa-certificate"></i> 认证考试</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>联系我们</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> tutorials@secdev.com</li>
+                        <li><i class="fas fa-phone"></i> +86 138 8888 8888</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 北京市海淀区中关村</li>
+                        <li><i class="fab fa-telegram"></i> @secdev_tutorials</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 SecDev教程中心. 保留所有权利 | 网络安全与技术开发教育平台</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuToggle.innerHTML = navLinks.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Category Tab Switching
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Filter tutorials based on category
+                // This is a simplified version, actual implementation would require more complex filtering
+                document.querySelector('.tutorial-grid').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Card animation
+        const cards = document.querySelectorAll('.tutorial-card');
+        
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 200 + index * 100);
+        });
+    </script>
+	
+</body>
+</html>
